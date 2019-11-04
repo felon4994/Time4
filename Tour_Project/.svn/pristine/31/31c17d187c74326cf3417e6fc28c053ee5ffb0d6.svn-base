@@ -1,0 +1,99 @@
+<%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="validator"
+	uri="http://www.springmodules.org/tags/commons-validator"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%
+	/**
+	* @Class Name : egovSampleRegister.jsp
+	* @Description : Sample Register 화면
+	* @Modification Information
+	*
+	*   수정일         수정자                   수정내용
+	*  -------    --------    ---------------------------
+	*  2009.02.01            최초 생성
+	*
+	* author 실행환경 개발팀
+	* since 2009.02.01
+	*
+	* Copyright (C) 2009 by MOPAS  All right reserved.
+	*/
+%>
+<!doctype html>
+<html lang="ko-kr">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>전국관광명소</title>
+
+    <!-- Bootstrap -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/kfonts2.css" rel="stylesheet">
+    <link href="../css/custom2.css" rel="stylesheet">
+    
+    <style>
+    h2 { margin: 20px 0}
+    .tab-content {padding: 10px 0;}
+    @import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
+      header{ height: 120px; background-color: rgba(125, 211, 242,0.5); border-radius: 15px; padding: 10px; margin:10px 0;font-family: 'Nanum Gothic', sans-serif;  text-align: center;}
+    </style>
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+<body>
+    <div class="container">       
+        <header>
+            <a href="/StartPage.do">
+                <h1 style="font-size: 45px">전국관광명소</h1></a>
+        </header>
+  <div class="tab-content">
+    <div class="tab-pane fade in active" id="home"> 
+           <table class="table">
+             <thead>
+              <tr>
+                <th>이름</th>
+                <th>주소</th>
+                <th>전화번호</th>
+              </tr>
+              </thead>
+              <tr>
+                <td>1</td>
+                <td>테이블 테스트  테이블 테스트</td>
+                <td>홍길동</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>테이블 테스트  테이블 테스트</td>
+                <td>임꺽정 </td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>테이블 테스트  테이블 테스트</td>
+                <td>성춘향 </td>
+              </tr>   
+            </table>
+    </div>
+    <div class="form-group" style="text-align: right">     
+            <button type="button" class="btn btn-default" onclick="location.href='/RegistrationPage.do'"> 등록 </button>
+        </div> 
+  </div>
+  <div class="input-group">
+    <input class="form-control" placeholder="검색" />
+    <span class="input-group-addon">찾기</span>
+  </div>
+
+</div>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="../js/bootstrap.min.js"></script>
+
+
+</body>
+</html>

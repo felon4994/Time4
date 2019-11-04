@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN" "http://www.ibatis.com/dtd/sql-map-config-2.dtd">
+
+<sqlMapConfig>
+	<sqlMap resource="egovframework/sqlmap/example/sample/EgovSample_Sample_SQL.xml"/>
+	<sqlMap resource="egovframework/sqlmap/example/sample/Big_City_SQL.xml"/>
+	<sqlMap resource="egovframework/sqlmap/example/sample/User_Border_SQL.xml"/>
+	<sqlMap resource="egovframework/sqlmap/example/sample/Member_SQL.xml"/>
+	<sqlMap resource="egovframework/sqlmap/example/sample/Notice_Border_SQL.xml"/>
+	<sqlMap resource="egovframework/sqlmap/example/sample/Qanda_Border_SQL.xml"/>
+	<sqlMap resource="egovframework/sqlmap/example/sample/RegistrationBorder_SQL.xml"/>
+	<sqlMap resource="egovframework/sqlmap/example/sample/Tour_SQL.xml"/>
+</sqlMapConfig>

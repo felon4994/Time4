@@ -1,0 +1,258 @@
+/*
+ * Copyright 2008-2009 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package egovframework.example.sample.web;
+
+import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Resource;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.ibatis.io.ResolverUtil.Test;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springmodules.validation.commons.DefaultBeanValidator;
+
+import egovframework.example.sample.service.Big_CityService;
+import egovframework.example.sample.service.Big_CityVO;
+import egovframework.example.sample.service.CityVO;
+import egovframework.example.sample.service.MemberService;
+import egovframework.example.sample.service.MemberVO;
+import egovframework.example.sample.service.SampleDefaultVO;
+import egovframework.example.sample.service.TourService;
+import egovframework.example.sample.service.TourVO;
+import egovframework.example.sample.service.impl.Big_CityDAO;
+import egovframework.rte.fdl.property.EgovPropertyService;
+import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
+
+/**
+ * @Class Name : BController.java
+ * @Description : EgovSample Controller Class
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ---------   ---------   -------------------------------
+ * @ 2009.03.16           최초생성
+ *
+ * @author 개발프레임웍크 실행환경 개발팀
+ * @since 2009. 03.16
+ * @version 1.0
+ * @see
+ *
+ *  Copyright (C) by MOPAS All right reserved.
+ */
+
+@Controller
+public class TourController {
+	
+	/** Big_CityService */
+	@Resource(name = "bigcityService")
+	private Big_CityService bigcityService;
+	
+	/*@Autowired
+	private Big_CityService bigcityService;*/
+	
+	/** tourService */
+	@Resource(name = "tourService")
+	private TourService tourService;
+	
+	/** memberService */
+	@Resource(name = "memberService")
+	private MemberService memberService;
+	
+
+
+	/** EgovPropertyService */
+	@Resource(name = "propertiesService")
+	protected EgovPropertyService propertiesService;
+
+	/** Validator */
+	@Resource(name = "beanValidator")
+	protected DefaultBeanValidator beanValidator;
+
+
+	/**
+	 * 글 목록을 조회한다. (pageing)
+	 * @param searchVO - 조회할 정보가 담긴 SampleDefaultVO
+	 * @param model
+	 * @return "Big_CityList"
+	 * @exception Exception
+	 */
+	@RequestMapping(value = "/NonUserPage.do")	//비회원 페이지
+	public String selectBig_CityList(@ModelAttribute("searchVO") SampleDefaultVO searchVO, ModelMap model) throws Exception {		
+		List<?> bigcityList = bigcityService.selectBig_CityList(searchVO);
+		model.addAttribute("resultList", bigcityList);	
+		
+		CityVO cityVO = new CityVO();
+		model.addAttribute("cityVO", cityVO);
+		
+		return "tour/userPage";
+	}
+	
+	//linked selectbox 처리 기능
+	@RequestMapping(value = "/autoSelectTour.do", produces = "application/text; charset=utf8")
+	@ResponseBody
+	protected String getTourInfoforSelectTag(HttpServletRequest request, ModelMap model) throws Exception{
+		
+		String bigCityName = request.getParameter("bigCityName");
+		String cityName = request.getParameter("cityName");
+		
+		String str="";
+		
+		String big_city_code = URLDecoder.decode(request.getParameter("big_city_code"),"utf-8");
+		List<CityVO> cityList = bigcityService.selectCityList(big_city_code);
+		
+		str += "<select id='city_code' name='city_code' multiple='multiple'>";
+		
+		for(int i=0; i<cityList.size(); i++){
+			str += "<option value='"+ cityList.get(i).getCity_code() +"'>"+ cityList.get(i).getCity_name() +"</option>";
+		}
+		
+		str += "</select>";
+		
+		return str;
+	}
+	
+		
+	/**
+	 * Big_City글을 조회한다.
+	 * @param Big_CityVO - 조회할 정보가 담긴 VO
+	 * @param searchVO - 목록 조회조건 정보가 담긴 VO
+	 * @param status
+	 * @return @ModelAttribute("sampleVO") - 조회한 정보
+	 * @exception Exception
+	 */
+	public Big_CityVO selectBig_City(Big_CityVO bigcityVO, @ModelAttribute("searchVO") SampleDefaultVO searchVO) throws Exception {
+		return bigcityService.selectBig_City(bigcityVO);
+	}
+	
+	/**
+	 * Tour글을 조회한다.
+	 * @param TourVO - 조회할 정보가 담긴 VO
+	 * @param searchVO - 목록 조회조건 정보가 담긴 VO
+	 * @param status
+	 * @return @ModelAttribute("TourVO") - 조회한 정보
+	 * @exception Exception
+	 */
+	public TourVO selectTour(TourVO tourVO, @ModelAttribute("searchVO") SampleDefaultVO searchVO) throws Exception {
+		return tourService.selectTour(tourVO);
+	}
+	
+	/**
+	 * 글 목록을 조회한다. (pageing)
+	 * @param searchVO - 조회할 정보가 담긴 SampleDefaultVO
+	 * @param model
+	 * @return "TourList"
+	 * @exception Exception
+	 */
+	@RequestMapping(value = "/BorderPage.do")
+	public String selectTourList(@ModelAttribute("searchVO") SampleDefaultVO searchVO, HttpServletRequest request, ModelMap model) throws Exception {		
+		request.setCharacterEncoding("utf-8");
+		
+		/** EgovPropertyService.sample */
+		searchVO.setPageUnit(propertiesService.getInt("pageUnit"));
+		searchVO.setPageSize(propertiesService.getInt("pageSize"));
+
+		/** pageing setting */
+		PaginationInfo paginationInfo = new PaginationInfo();
+		paginationInfo.setCurrentPageNo(searchVO.getPageIndex());
+		paginationInfo.setRecordCountPerPage(searchVO.getPageUnit());
+		paginationInfo.setPageSize(searchVO.getPageSize());
+
+		searchVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
+		searchVO.setLastIndex(paginationInfo.getLastRecordIndex());
+		searchVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
+		
+		int totCnt = tourService.selectTourListTotCnt(searchVO);
+		paginationInfo.setTotalRecordCount(totCnt);
+		model.addAttribute("paginationInfo", paginationInfo);
+		
+		String big_city_code = request.getParameter("big_city_code");
+		String city_code = request.getParameter("city_code");		
+		
+		System.out.println("test===========================" + city_code);
+		System.out.println("test===========================" + big_city_code);
+		
+		CityVO cityVO = new CityVO();
+		cityVO.setCity_code(city_code);
+		
+		CityVO cityNames = tourService.selectCityNames(cityVO);
+		String bigCityName = cityNames.getBig_city_name();
+		String cityName = cityNames.getCity_name();
+		
+		String resultName = bigCityName + "  " + cityName;
+		model.addAttribute("resultName", resultName);
+		
+		List<?> tourList = tourService.selectTourList(cityVO);
+		model.addAttribute("resultList", tourList);	
+		
+		TourVO tourVO = new TourVO();
+		model.addAttribute("tourVO", tourVO);
+		
+		return "tour/borderPage";
+	}
+	
+
+	
+	//메인 시작페이지
+	@RequestMapping(value = "/StartPage.do")
+	public String tourStartPage() throws Exception {		
+		return "tour/startPage";
+	}
+	
+	//관리자 페이지
+	@RequestMapping(value = "/ManagerPage.do")
+	public String tourManagerPage() throws Exception {		
+		return "tour/managerPage";
+	}
+	
+	/*//관광지 목록 페이지
+	@RequestMapping(value = "/BorderPage.do")
+	public String BorderPage() throws Exception {		
+		return "tour/borderPage";
+	}*/
+	
+	//게시판 
+	@RequestMapping(value = "/ListPage.do")
+	public String ListPage() throws Exception {		
+		return "tour/listPage";
+	}
+	
+	 //회원 등록 폼 이동.
+	@RequestMapping(value = "/JoinPage.do")
+	public String addMember(@ModelAttribute("searchVO") SampleDefaultVO searchVO, MemberVO memberVO, Model model)
+			throws Exception {
+		//memberService.insertMember(memberVO);
+		return "tour/joinPage";
+	}
+	
+	  //회원 등록
+		@RequestMapping(value = "/Join.do")
+		public String addMemberJoin(@ModelAttribute("searchVO") SampleDefaultVO searchVO, MemberVO memberVO, Model model)
+				throws Exception {
+			
+			memberService.insertSample(memberVO);
+			
+			return "forward:/LoginPage.do";
+		}
+}

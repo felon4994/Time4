@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Qanda_Border">
+
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="searchVO" type="egovframework.example.sample.service.SampleDefaultVO"/>
+
+	<resultMap id="qandaborder" class="egovframework.example.sample.service.Qanda_BorderVO">
+		<result property="qandano" column="qandano"/>
+		<result property="question" column="question"/>
+		<result property="answer" column="answer"/>
+		<result property="todate" column="todate"/>
+	</resultMap>
+
+		<insert id="qandaborderDAO.insertQanda_Border">
+		<![CDATA[
+			INSERT INTO QANDA_BORDER
+				( QANDANO
+				  , QUESTION
+				  , ANSWER
+				  , TODATE )
+			VALUES ( #qandano#
+				  , #question#
+				  , #answer#
+				  , #todate# )
+		]]>
+	</insert>
+    	<update id="qandaborderDAO.updateQanda_Border">
+		<![CDATA[
+			UPDATE QANDA_BORDER
+			SET QANDANO=#qandano#
+				, QUESTION=#question#
+				, ANSWER=#answer#
+				, TODATE=#todate#
+			WHERE QANDANO=#qandano#
+		]]>
+	</update>
+	
+	<delete id="qandaborderDAO.deleteQanda_Border">
+		<![CDATA[
+			DELETE FROM QANDA_BORDER 
+			WHERE QANDANO=#qandano#
+		]]>
+	</delete>
+		
+		
+    <select id="qandaborderDAO.selectQanda_Border" resultMap="qandaborder">
+        <![CDATA[
+            SELECT
+               QANDANO, QUESTION, ANSWER, TODATE
+            FROM QANDA_BORDER 
+            WHERE QANDANO=#qandano#
+        ]]>
+    </select>
+	
+	<select id="qandaborderDAO.selectQanda_BorderList" parameterClass="searchVO" resultClass="egovMap">
+	   		
+			SELECT
+				QANDANO, QUESTION, ANSWER, TODATE
+			FROM QANDA_BORDER
+			WHERE 1=1
+			<isEqual prepend="AND" property="searchCondition" compareValue="0">
+				NOTICENO LIKE '%' || #searchKeyword# || '%'
+			</isEqual>
+			<isEqual prepend="AND" property="searchCondition" compareValue="1">
+				NOTICECONTENTS LIKE '%' || #searchKeyword# || '%'
+			</isEqual>
+			ORDER BY QANDANO DESC
+			LIMIT #recordCountPerPage# OFFSET #firstIndex#    
+	    
+	   	<!--  	
+ 			SELECT A.QANDANO, A.QUESTION, A.ANSWER, A.TODATE
+ 			FROM (
+		 			SELECT ROWNUM RNUM, S.*
+		 			FROM (
+				 			SELECT
+								QANDANO, QUESTION, ANSWER, TODATE
+							FROM QANDA_BORDER
+							WHERE 1=1
+							<isEqual prepend="AND" property="searchCondition" compareValue="0">
+								QANDANO LIKE '%' || #searchKeyword# || '%'
+							</isEqual>
+							<isEqual prepend="AND" property="searchCondition" compareValue="1">
+								QUESTION LIKE '%' || #searchKeyword# || '%'
+							</isEqual>
+							ORDER BY QANDANO DESC
+					) S	
+			) A
+ 		<![CDATA[ WHERE ROWNUM <= #recordCountPerPage# AND RNUM > #firstIndex# ]]>
+ 		-->			
+	</select>
+	
+	<select id="qandaborderDAO.selectQanda_BorderListTotCnt" parameterClass="searchVO" resultClass="int">
+
+			SELECT COUNT(*) totcnt
+			FROM QANDA_BORDER 
+		 	
+			WHERE 1=1
+			<isEqual prepend="AND" property="searchCondition" compareValue="0">
+				QANDANO LIKE '%' || #searchKeyword# || '%'
+			</isEqual>
+			<isEqual prepend="AND" property="searchCondition" compareValue="1">
+				QUESTION LIKE '%' || #searchKeyword# || '%'
+			</isEqual>
+		 
+	</select>
+
+</sqlMap>

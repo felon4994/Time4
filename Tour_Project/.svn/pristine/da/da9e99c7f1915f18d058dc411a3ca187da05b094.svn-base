@@ -1,0 +1,118 @@
+<%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="validator"
+	uri="http://www.springmodules.org/tags/commons-validator"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%
+	/**
+	* @Class Name : egovSampleRegister.jsp
+	* @Description : Sample Register 화면
+	* @Modification Information
+	*
+	*   수정일         수정자                   수정내용
+	*  -------    --------    ---------------------------
+	*  2009.02.01            최초 생성
+	*
+	* author 실행환경 개발팀
+	* since 2009.02.01
+	*
+	* Copyright (C) 2009 by MOPAS  All right reserved.
+	*/
+%>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>표 만들기</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+a {
+	text-decoration: none
+}
+
+#wrapper {
+	width: 100%;
+	margin: 0 auto;
+}
+
+header { /* 헤더 */
+	width: 100%;
+	height: 120px;
+	background-color: bisque;
+}
+
+.header-text {
+	font-size: 50px;
+	color: black;
+	text-align: center;
+	line-height: 120px;
+}
+
+.tableMK {
+	width: 100%;
+	border-top: 1px solid gainsboro;
+	border-collapse: collapse;
+}
+
+.th, td {
+	padding: 10px;
+	border-bottom: 1px solid gainsboro;
+	text-align: center;
+}
+</style>
+</head>
+<body>
+	<header>
+		<a href="StartPage.do">
+			<h1 class="header-text">전국관광명소</h1>
+		</a>
+	</header>
+	<p>
+	<h2 style="text-align: center;">ㅇㅇ도 ㅇㅇ시 ㅇㅇ구</h2>
+	</p>
+	<c:forEach var="result" items="${resultList}" varStatus="status">
+	<table class="tableMK">
+		<tbody>
+			<tr style="border-top: 1px solid gainboro">
+				<td style="border-right: 1px solid gainsboro"><c:out value="${result.tourName}"/></td>
+				<td rowspan="4">사진</td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px solid gainsboro"><c:out value="${result.tourAdd}"/></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px solid gainsboro"><c:out value="${result.tourTell}"/></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px solid gainsboro">설명</td>
+			</tr>
+		</tbody>
+	</table>
+	</c:forEach>
+	
+	<table class="tableMK">
+		<tbody>
+			<tr style="border-top: 1px solid gainboro">
+				<td style="border-right: 1px solid gainsboro">관광지 이름</td>
+				<td rowspan="4">사진</td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px solid gainsboro">관광지 주소</td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px solid gainsboro">전화번호</td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px solid gainsboro">설명</td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<p style="text-align: center">
+		<button class="btn_1">이전 페이지</button>
+		<button class="btn_2">다음 페이지</button>
+	</p>
+</body>
+</html>

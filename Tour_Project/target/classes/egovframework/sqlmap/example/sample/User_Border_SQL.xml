@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="User_Border">
+
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="searchVO" type="egovframework.example.sample.service.SampleDefaultVO"/>
+
+	<resultMap id="userborder" class="egovframework.example.sample.service.User_BorderVO">
+		<result property="userno" column="userno"/>
+		<result property="title" column="title"/>
+		<result property="username" column="username"/>
+		<result property="todate" column="todate"/>
+	</resultMap>
+
+		<insert id="userborderDAO.insertUser_Border">
+		<![CDATA[
+			INSERT INTO USER_BORDER
+				( USERNO
+				  , TITLE
+				  , USERNAME
+				  , TODATE )
+			VALUES ( #userno#
+				  , #title#
+				  , #username#
+				  , #todate# )
+		]]>
+	</insert>
+    	<update id="userborderDAO.updateUser_Border">
+		<![CDATA[
+			UPDATE USER_BORDER
+			SET USERNO=#userno#
+				, TITLE=#title#
+				, USERNAME=#username#
+				, TODATE=#todate#
+			WHERE USERNO=#userno#
+		]]>
+	</update>
+	
+	<delete id="userborderDAO.deleteUser_Border">
+		<![CDATA[
+			DELETE FROM USER_BORDER 
+			WHERE USERNO=#userno#
+		]]>
+	</delete>
+		
+		
+    <select id="userborderDAO.selectUser_Border" resultMap="userborder">
+        <![CDATA[
+            SELECT
+                USERNO, TITLE, USERNAME, TODATE
+            FROM USER_BORDER 
+            WHERE USERNO=#userno#
+        ]]>
+    </select>
+	
+	<select id="userborderDAO.selectUser_BorderList" parameterClass="searchVO" resultClass="egovMap">
+	   		
+			SELECT
+				USERNO, TITLE, USERNAME, TODATE
+			FROM USER_BORDER
+			WHERE 1=1
+			<isEqual prepend="AND" property="searchCondition" compareValue="0">
+				USERNO LIKE '%' || #searchKeyword# || '%'
+			</isEqual>
+			<isEqual prepend="AND" property="searchCondition" compareValue="1">
+				TITLE LIKE '%' || #searchKeyword# || '%'
+			</isEqual>
+			ORDER BY USERNO DESC
+			LIMIT #recordCountPerPage# OFFSET #firstIndex#
+	    
+ 		<!--  	SELECT A.USERNO, A.TITLE, A.USERNAME, A.TODATE
+ 			FROM (
+		 			SELECT ROWNUM RNUM, S.*
+		 			FROM (
+				 			SELECT
+								USERNO, TITLE, USERNAME, TODATE
+							FROM USER_BORDER
+							WHERE 1=1
+							<isEqual prepend="AND" property="searchCondition" compareValue="0">
+								USERNO LIKE '%' || #searchKeyword# || '%'
+							</isEqual>
+							<isEqual prepend="AND" property="searchCondition" compareValue="1">
+								USERNAME LIKE '%' || #searchKeyword# || '%'
+							</isEqual>
+							ORDER BY USERNO DESC
+					) S	
+			) A
+ 		<![CDATA[ WHERE ROWNUM <= #recordCountPerPage# AND RNUM > #firstIndex# ]]>
+ 		-->			
+	</select>
+	
+	<select id="userborderDAO.selectUser_BorderListTotCnt" parameterClass="searchVO" resultClass="int">
+
+			SELECT COUNT(*) totcnt
+			FROM USER_BORDER 
+		 	
+			WHERE 1=1
+			<isEqual prepend="AND" property="searchCondition" compareValue="0">
+				USERNO LIKE '%' || #searchKeyword# || '%'
+			</isEqual>
+			<isEqual prepend="AND" property="searchCondition" compareValue="1">
+				USERNAME LIKE '%' || #searchKeyword# || '%'
+			</isEqual>
+		 
+	</select>
+
+</sqlMap>

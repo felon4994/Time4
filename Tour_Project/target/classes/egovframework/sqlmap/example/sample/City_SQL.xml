@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="City">
+
+	<typeAlias alias="egovMap"
+		type="egovframework.rte.psl.dataaccess.util.EgovMap" />
+	<typeAlias alias="searchVO"
+		type="egovframework.example.sample.service.SampleDefaultVO" />
+
+	<resultMap id="city" class="egovframework.example.sample.service.CityVO">
+		<result property="city_code" column="city_code" />
+		<result property="city_name" column="city_name" />
+		<result property="big_city_code" column="big_city_code" />
+	</resultMap>
+
+	<select id="cityDAO.selectCity" resultMap="city">
+        <![CDATA[
+            SELECT
+                C.CITY_CODE, C.CITY_NAME,  C.BIG_CITY_CODE,
+                B.BIG_CITY_CODE, B.BIG_CITY_NAME
+            FROM CITY C, BIG_CITY B
+            WHERE C.CITY_CODE = B.BIG_CITY_CODE
+            AND CITY_CODE=#city_code#
+        ]]>
+	</select>
+
+	<select id="cityDAO.selectCityList" parameterClass="searchVO"
+		resultClass="egovMap">
+		SELECT
+			c.city_code,
+			c.city_name,
+			c.big_city_code,
+			b.big_city_code
+		FROM
+			CITY c,
+			BIG_CITY b
+		WHERE
+			c.big_city_code = #b.big_city_code#;
+	</select>
+
+	<select id="cityDAO.selectCityListTotCnt" parameterClass="searchVO"
+		resultClass="int">
+		SELECT COUNT(*) totcnt
+		FROM CITY
+	</select>
+</sqlMap>

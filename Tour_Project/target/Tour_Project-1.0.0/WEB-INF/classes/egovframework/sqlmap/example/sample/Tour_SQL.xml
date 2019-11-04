@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Tour">
+
+	<typeAlias alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap" />
+	<typeAlias alias="searchVO" type="egovframework.example.sample.service.SampleDefaultVO" />
+	<typeAlias alias="cityVO" type="egovframework.example.sample.service.CityVO" />
+
+	<resultMap id="city" class="egovframework.example.sample.service.CityVO">
+		<result property="city_code" column="city_code" />
+		<result property="city_name" column="city_name" />
+		<result property="big_city_code" column="big_city_code" />
+	</resultMap>
+
+	<select id="tourDAO.selectTourList" parameterClass="cityVO" resultClass="egovMap">
+		SELECT *
+		FROM TOUR
+		WHERE city_code = #city_code#
+	</select>
+
+	<select id="tourDAO.selectTourListTotCnt" parameterClass="searchVO"	resultClass="int">
+		SELECT COUNT(*) totcnt
+		FROM TOUR
+	</select>
+	
+	<select id="tourDAO.selectCityNames" parameterClass="cityVO" resultClass="cityVO">
+	    SELECT 
+	    	B.BIG_CITY_CODE, 
+            B.BIG_CITY_NAME, 
+            C.CITY_NAME
+        FROM 
+           	BIG_CITY B, 
+           	CITY C
+        WHERE 
+           	B.BIG_CITY_CODE = C.BIG_CITY_CODE
+        AND 
+        	C.CITY_CODE = #city_code#
+	</select>	
+</sqlMap>

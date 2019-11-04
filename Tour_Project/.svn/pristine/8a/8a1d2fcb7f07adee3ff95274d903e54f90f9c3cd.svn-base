@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="RegistrationBorder">
+
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="searchVO" type="egovframework.example.sample.service.SampleDefaultVO"/>
+
+	<resultMap id="registrationBorder" class="egovframework.example.sample.service.RegistrationBorderVO">
+		<result property="tour_code" column="tour_code"/>
+		<result property="tour_class" column="tour_class"/>
+		<result property="tour_name" column="tour_name"/>
+		<result property="tour_add" column="tour_add"/>
+		<result property="city_code" column="city_code"/>
+		<result property="tour_tell" column="tour_tell"/>
+	</resultMap>
+	<insert id="registrationBorderDAO.insertRegistrationBorder">
+		<![CDATA[
+			INSERT INTO TOUR
+				( TOUR_CODE
+				  , TOUR_CLASS
+				  , TOUR_NAME
+				  , TOUR_ADD
+				  , CITY_CODE
+				  , TOUR_TELL
+				  )
+			VALUES (#tour_code#
+				  , #tour_class#
+				  , #tour_name#
+				   , #tour_add#
+				  , #city_code#
+				  , #tour_tell#
+				   )
+		]]>
+	</insert>
+	<update id="registrationBorderDAO.updateRegistrationBorder">
+		<![CDATA[
+			UPDATE TOUR
+			SET	TOUR_CODE=#tour_code#
+				  , TOUR_CLASS=#tour_class#
+				  , TOUR_NAME=#tour_name#
+				  , TOUR_ADD=#tour_add#
+				  , CITY_CODE=#city_code#
+				  , TOUR_TELL=#tour_tell#
+			WHERE TOUR_CODE=#tour_code#
+		]]>
+	</update>
+	
+	<delete id="registrationBorderDAO.deleteRegistrationBorder">
+		<![CDATA[
+			DELETE FROM TOUR 
+			WHERE TOUR_CODE=#tour_code#
+		]]>
+	</delete>
+		
+		
+    <select id="registrationBorderDAO.selectRegistrationBorder" resultMap="registrationBorder">
+        <![CDATA[
+            SELECT
+               TOUR_CODE, TOUR_CLASS, TOUR_NAME, TOUR_ADD, CITY_CODE, TOUR_TELL
+            FROM TOUR
+            WHERE TOUR_CODE=#tour_code#
+        ]]>
+    </select>
+	
+	<!-- <select id="registrationBorderDAO.selectRegistrationBorderList" parameterClass="searchVO" resultClass="egovMap">
+	   		
+ 			SELECT A.TOUR_NAME, A.TOUR_ADD, A.TOUR_TELL
+ 			FROM (
+		 			SELECT ROWNUM RNUM, S.*
+		 			FROM (
+				 			SELECT
+								TOUR_NAME, TOUR_ADD, TOUR_TELL
+							FROM TOUR
+							WHERE 1=1
+							<isEqual prepend="AND" property="searchCondition" compareValue="0">
+								NOTICENO LIKE '%' || #searchKeyword# || '%'
+							</isEqual>
+							<isEqual prepend="AND" property="searchCondition" compareValue="1">
+								NOTICENAME LIKE '%' || #searchKeyword# || '%'
+							</isEqual>
+							ORDER BY TOUR_CODE DESC
+					) S	
+			) A
+ 		<![CDATA[ WHERE ROWNUM <= #recordCountPerPage# AND RNUM > #firstIndex# ]]>
+ 					
+	</select> -->
+	<select id="registrationBorderDAO.selectRegistrationBorderList" parameterClass="searchVO" resultClass="egovMap">
+	   	   		
+			SELECT
+				TOUR_CODE, TOUR_CLASS, TOUR_NAME, TOUR_ADD, CITY_CODE, TOUR_TELL
+			FROM TOUR
+			WHERE 1=1
+			<isEqual prepend="AND" property="searchCondition" compareValue="0">
+				TOUR_CODE LIKE '%' || #searchKeyword# || '%'
+			</isEqual>
+			<isEqual prepend="AND" property="searchCondition" compareValue="1">
+				TOUR_NAME LIKE '%' || #searchKeyword# || '%'
+			</isEqual>
+			ORDER BY TOUR_CODE DESC
+			LIMIT #recordCountPerPage# OFFSET #firstIndex#
+			
+	</select>
+	
+	<select id="registrationBorderDAO.selectRegistrationBorderListTotCnt" parameterClass="searchVO" resultClass="int">
+
+			SELECT COUNT(*) totcnt
+			FROM TOUR 
+		 	
+			WHERE 1=1
+			<isEqual prepend="AND" property="searchCondition" compareValue="0">
+				TOUR_CODE LIKE '%' || #searchKeyword# || '%'
+			</isEqual>
+			<isEqual prepend="AND" property="searchCondition" compareValue="1">
+				TOUR_CODE LIKE '%' || #searchKeyword# || '%'
+			</isEqual>
+		 
+	</select>
+	
+	</sqlMap>

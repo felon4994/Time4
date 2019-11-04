@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Big_City">
+
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="searchVO" type="egovframework.example.sample.service.SampleDefaultVO"/>
+
+	<resultMap id="bigcity" class="egovframework.example.sample.service.Big_CityVO">
+		<result property="big_city_code" column="big_city_code"/>
+		<result property="big_city_name" column="big_city_name"/>
+	</resultMap>
+	
+    
+    <select id="bigcityDAO.selectBig_City" resultMap="bigcity">
+        <![CDATA[
+            SELECT
+                BIG_CITY_CODE, BIG_CITY_NAME
+            FROM BIG_CITY 
+            WHERE BIG_CITY_CODE=#big_city_code#
+        ]]>
+    </select>
+	
+	<select id="bigcityDAO.selectBig_CityList" parameterClass="searchVO" resultClass="egovMap">
+			SELECT
+				BIG_CITY_CODE, BIG_CITY_NAME
+			FROM BIG_CITY
+			WHERE 1=1
+			
+			<isEqual prepend="AND" property="searchCondition" compareValue="0">
+				BIG_CITY_CODE LIKE '%' || #searchKeyword# || '%'
+			</isEqual>
+		
+			ORDER BY ID DESC
+			LIMIT #recordCountPerPage# OFFSET #firstIndex#		
+	</select>
+	
+	<select id="bigcityDAO.selectBig_CityListTotCnt" parameterClass="searchVO" resultClass="int">
+
+			SELECT COUNT(*) totcnt
+			FROM BIG_CITY
+			WHERE 1=1
+			
+			<isEqual prepend="AND" property="searchCondition" compareValue="0">
+				BIG_CITY_CODE LIKE '%' || #searchKeyword# || '%'
+			</isEqual>			
+	</select>
+</sqlMap>

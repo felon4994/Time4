@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Notice_Border">
+
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="searchVO" type="egovframework.example.sample.service.SampleDefaultVO"/>
+
+	<resultMap id="noticeborder" class="egovframework.example.sample.service.Notice_BorderVO">
+		<result property="noticeno" column="noticeno"/>
+		<result property="noticecontents" column="noticecontents"/>
+		<result property="noticename" column="noticename"/>
+		<result property="todate" column="todate"/>
+	</resultMap>
+
+		<insert id="noticeborderDAO.insertNotice_Border">
+		<![CDATA[
+			INSERT INTO NOTICE_BORDER
+				( NOTICENO
+				  , NOTICECONTENTS
+				  , NOTICENAME
+				  , TODATE )
+			VALUES ( #noticeno#
+				  , #noticecontents#
+				  , #noticename#
+				  , #todate# )
+		]]>
+	</insert>
+    	<update id="noticeborderDAO.updateNotice_Border">
+		<![CDATA[
+			UPDATE NOTICE_BORDER
+			SET NOTICENO=#noticeno#
+				, NOTICECONTENTS=#noticecontents#
+				, NOTICENAME=#noticename#
+				, TODATE=#todate#
+			WHERE NOTICENO=#noticeno#
+		]]>
+	</update>
+	
+	<delete id="noticeborderDAO.deleteNotice_Border">
+		<![CDATA[
+			DELETE FROM NOTICE_BORDER 
+			WHERE NOTICENO=#noticeno#
+		]]>
+	</delete>
+		
+		
+    <select id="noticeborderDAO.selectNotice_Border" resultMap="noticeborder">
+        <![CDATA[
+            SELECT
+               NOTICENO, NOTICECONTENTS, NOTICENAME, TODATE
+            FROM NOTICE_BORDER 
+            WHERE NOTICENO=#noticeno#
+        ]]>
+    </select>
+	
+	<select id="noticeborderDAO.selectNotice_BorderList" parameterClass="searchVO" resultClass="egovMap">
+	   	   		
+			SELECT
+				NOTICENO, NOTICECONTENTS, NOTICENAME, TODATE
+			FROM NOTICE_BORDER
+			WHERE 1=1
+			<isEqual prepend="AND" property="searchCondition" compareValue="0">
+				NOTICENO LIKE '%' || #searchKeyword# || '%'
+			</isEqual>
+			<isEqual prepend="AND" property="searchCondition" compareValue="1">
+				NOTICECONTENTS LIKE '%' || #searchKeyword# || '%'
+			</isEqual>
+			ORDER BY NOTICENO DESC
+			LIMIT #recordCountPerPage# OFFSET #firstIndex#    
+	
+	   <!--  
+ 			SELECT A.NOTICENO, A.NOTICECONTENTS, A.NOTICENAME, A.TODATE
+ 			FROM (
+		 			SELECT ROWNUM RNUM, S.*
+		 			FROM (
+				 			SELECT
+								NOTICENO, NOTICECONTENTS, NOTICENAME, TODATE
+							FROM NOTICE_BORDER
+							WHERE 1=1
+							<isEqual prepend="AND" property="searchCondition" compareValue="0">
+								NOTICENO LIKE '%' || #searchKeyword# || '%'
+							</isEqual>
+							<isEqual prepend="AND" property="searchCondition" compareValue="1">
+								NOTICENAME LIKE '%' || #searchKeyword# || '%'
+							</isEqual>
+							ORDER BY NOTICENO DESC
+					) S	
+			) A
+ 		<![CDATA[ WHERE ROWNUM <= #recordCountPerPage# AND RNUM > #firstIndex# ]]>
+ 		-->	
+	</select>
+	
+	<select id="noticeborderDAO.selectNotice_BorderListTotCnt" parameterClass="searchVO" resultClass="int">
+
+			SELECT COUNT(*) totcnt
+			FROM NOTICE_BORDER 
+		 	
+			WHERE 1=1
+			<isEqual prepend="AND" property="searchCondition" compareValue="0">
+				NOTICENO LIKE '%' || #searchKeyword# || '%'
+			</isEqual>
+			<isEqual prepend="AND" property="searchCondition" compareValue="1">
+				NOTICENAME LIKE '%' || #searchKeyword# || '%'
+			</isEqual>
+		 
+	</select>
+
+</sqlMap>

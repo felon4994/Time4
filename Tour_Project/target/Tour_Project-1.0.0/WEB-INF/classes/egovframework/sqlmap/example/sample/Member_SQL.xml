@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Member">
+
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="searchVO" type="egovframework.example.sample.service.SampleDefaultVO"/>
+   <typeAlias  alias="memberVO" type="egovframework.example.sample.service.MemberVO"/>
+	<resultMap id="member" class="egovframework.example.sample.service.MemberVO">
+		<result property="id" column="id"/>
+		<result property="loc" column="loc"/>
+		<result property="password" column="password"/>
+	</resultMap>
+	<insert id="memberDAO.insertSample">
+		<![CDATA[
+			INSERT INTO MEMBER 
+				( ID
+				  , LOC
+				  , PASSWORD
+				  )
+			VALUES (#id#
+				  , #loc#
+				  , #password#
+				   )
+		]]>
+	</insert>
+	<select id="memberDAO.selectMemberCnt" parameterClass="memberVO" resultClass="int">
+		SELECT COUNT(*) cnt
+		FROM MEMBER
+		WHERE ID = #id# AND PASSWORD=#password#
+	</select>
+	
+	</sqlMap>

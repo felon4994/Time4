@@ -1,0 +1,91 @@
+<%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="validator" uri="http://www.springmodules.org/tags/commons-validator"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%
+	/**
+	* @Class Name : egovSampleRegister.jsp
+	* @Description : Sample Register 화면
+	* @Modification Information
+	*
+	*   수정일         수정자                   수정내용
+	*  -------    --------    ---------------------------
+	*  2009.02.01            최초 생성
+	*
+	* author 실행환경 개발팀
+	* since 2009.02.01
+	*
+	* Copyright (C) 2009 by MOPAS  All right reserved.
+	*/
+%>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>전국관광명소</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
+
+<link rel="stylesheet" href="<c:url value='/css/egovframework/jqueryui.css'/>" />
+
+</style>
+<!-- Bootstrap -->
+<link href="../css/bootstrap.min.css" rel="stylesheet">
+<style>
+@import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
+
+header {
+	height: 120px;
+	background-color: rgba(125, 211, 242, 0.5);
+	border-radius: 15px;
+	padding: 10px;
+	margin: 10px 0;
+	font-family: 'Nanum Gothic', sans-serif;
+	text-align: center;
+}
+
+footer {
+	font-family: 'Nanum Gothic', sans-serif;
+	text-align: center;
+}
+
+ul.nav {
+	background-color: rgba(201, 201, 201, .5);
+	padding: 10px;
+	border-radius: 10px;
+}
+</style>
+</head>
+<body>
+	<header>
+		<a href="StartPage.do">
+			<h1 class="header-text">전국관광명소</h1>
+		</a>
+	</header>	
+	<p>
+	<h2 style="text-align: center;">		
+		<h2><c:out value="${resultName}"/></h2>
+	</p>
+	<c:forEach var="result" items="${resultList}" varStatus="status">
+		<div class="row">
+			<div class="col-md-4">
+				<div class="thumbnail">
+					<img src="../images/경복궁.jpg">
+					<div class="caption">
+						<h3><c:out value="${result.tourName}"/></h3>
+						<p>주    소 : <c:out value="${result.tourAdd}"/></p>
+						<p>전화번호 : <c:out value="${result.tourTell}"/></p>
+						<p>분    류 : <c:out value="${result.tourClass}"/></p>						
+					</div>
+				</div>
+			</div>
+		</div>
+	</c:forEach>
+	<p style="text-align: center">
+		<a href="#" class="btn btn-default" role="button">이전 페이지</a>
+		<a href="#" class="btn btn-default" role="button">다음 페이지</a>
+	</p>
+</body>
+</html>
